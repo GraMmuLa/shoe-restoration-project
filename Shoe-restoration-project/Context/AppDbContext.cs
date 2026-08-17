@@ -42,6 +42,10 @@ public partial class AppDbContext : DbContext
 
     public virtual DbSet<SkinType> SkinTypes { get; set; }
 
+    public virtual DbSet<User> Users { get; set; }
+
+    public virtual DbSet<Role> Roles { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Brand>(entity =>
@@ -222,6 +226,42 @@ public partial class AppDbContext : DbContext
             entity.HasIndex(e => e.Name, "IX_SkinTypes_Name").IsUnique();
 
             entity.Property(e => e.Name).HasMaxLength(64);
+        });
+
+        modelBuilder.Entity<User>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK_Users");
+
+            entity.Property(e => e.Username)
+                .IsRequired()
+                .HasMaxLength(128);
+
+            entity.Property(e => e.PasswordHash)
+                .IsRequired()
+                .HasMaxLength(256);
+
+            entity.Property(e => e.Email)
+                .IsRequired()
+                .HasMaxLength(128);
+
+            entity.HasOne(e => e.Role)
+                .WithMany(e => e.Users)
+                .HasForeignKey(e => e.RoleId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Users_Roles");
+
+            entity.HasIndex(e => e.Username, "IX_Users_Username").IsUnique();
+        });
+
+        modelBuilder.Entity<Role>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK_Roles");
+
+            entity.Property(e => e.Name)
+                .IsRequired()
+                .HasMaxLength(64);
+
+            entity.HasIndex(e => e.Name, "IX_Roles_Name").IsUnique();
         });
 
         OnModelCreatingPartial(modelBuilder);
