@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding" addBOMForNewFiles="with BOM under Windows, with no BOM otherwise">
+    <file url="file://$PROJECT_DIR$/ShoeRestorationProject/DTO/MeasurementMetricDto.cs" charset="US-ASCII" />
+    <file url="file://$PROJECT_DIR$/ShoeRestorationProject/DTO/ShoeTypeDto.cs" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/ShoeRestorationProject/Repositories/Implementations/MeasurementPropertiesRepository.cs" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/ShoeRestorationProject/Repositories/Implementations/MeasurementValuesRepository.cs" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/ShoeRestorationProject/Repositories/Implementations/ShoeImagesRepository.cs" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/ShoeRestorationProject/Repositories/Implementations/ShoeMeasurementsRepository.cs" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/ShoeRestorationProject/Repositories/Implementations/ShoeTypesRepository.cs" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/ShoeRestorationProject/Repositories/Implementations/ShoesRepository.cs" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ShoeRestorationProject/Repositories/Implementations/SizeMetricsRepository.cs" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/ShoeRestorationProject/Repositories/Implementations/SizesRepository.cs" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/ShoeRestorationProject/Repositories/Implementations/SkinTypesRepository.cs" charset="ISO-8859-1" />
+  </component>
+</project>
