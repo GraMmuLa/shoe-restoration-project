@@ -22,193 +22,147 @@ namespace ShoeRestorationProject.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Shoe_restoration_project.Models.Brand", b =>
+            modelBuilder.Entity("ShoeRestorationProject.Models.Brand", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("Id");
+                        .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("CountryId")
-                        .HasColumnType("int")
-                        .HasColumnName("CountryId");
+                        .HasColumnType("int");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(MAX)")
-                        .HasColumnName("Description");
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)")
-                        .HasColumnName("Name");
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CountryId");
 
-                    b.HasIndex(new[] { "Name" }, "IX_Brands_Name")
+                    b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("Brands");
+                    b.ToTable("Brands", (string)null);
                 });
 
-            modelBuilder.Entity("Shoe_restoration_project.Models.Color", b =>
+            modelBuilder.Entity("ShoeRestorationProject.Models.Color", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("Id");
+                        .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(64)
-                        .HasColumnType("nvarchar(64)")
-                        .HasColumnName("Name");
+                        .HasColumnType("nvarchar(64)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex(new[] { "Name" }, "IX_Colors_Name")
+                    b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("Colors");
+                    b.ToTable("Colors", (string)null);
                 });
 
-            modelBuilder.Entity("Shoe_restoration_project.Models.Condition", b =>
+            modelBuilder.Entity("ShoeRestorationProject.Models.Condition", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("Id");
+                        .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(64)
-                        .HasColumnType("nvarchar(64)")
-                        .HasColumnName("Name");
+                        .HasColumnType("nvarchar(64)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex(new[] { "Name" }, "IX_Conditions_Name")
+                    b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("Conditions");
+                    b.ToTable("Conditions", (string)null);
                 });
 
-            modelBuilder.Entity("Shoe_restoration_project.Models.Country", b =>
+            modelBuilder.Entity("ShoeRestorationProject.Models.Country", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("id");
+                        .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("IsoCode")
                         .IsRequired()
                         .HasMaxLength(2)
-                        .HasColumnType("nchar(2)")
-                        .HasColumnName("IsoCode")
-                        .IsFixedLength();
+                        .HasColumnType("nvarchar(2)");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(64)
-                        .HasColumnType("nvarchar(64)")
-                        .HasColumnName("Name");
+                        .HasColumnType("nvarchar(64)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex(new[] { "IsoCode" }, "IX_Countries_IsoCode")
+                    b.HasIndex("Name")
                         .IsUnique();
 
-                    b.HasIndex(new[] { "Name" }, "IX_Countries_Name")
-                        .IsUnique();
-
-                    b.ToTable("Countries");
+                    b.ToTable("Countries", (string)null);
                 });
 
-            modelBuilder.Entity("Shoe_restoration_project.Models.MeasurementMetric", b =>
+            modelBuilder.Entity("ShoeRestorationProject.Models.MeasurementMetric", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("Id");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(8)
-                        .HasColumnType("nvarchar(8)")
-                        .HasColumnName("Name")
-                        .IsFixedLength();
-
-                    b.HasKey("Id");
-
-                    b.HasIndex(new[] { "Name" }, "IX_MeasurementMetrics_Name")
-                        .IsUnique();
-
-                    b.ToTable("MeasurementMetrics");
-                });
-
-            modelBuilder.Entity("Shoe_restoration_project.Models.MeasurementProperty", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("Id");
+                        .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(64)
-                        .HasColumnType("nvarchar(64)")
-                        .HasColumnName("Name");
+                        .HasColumnType("nvarchar(64)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex(new[] { "Name" }, "IX_MeasurementProperties_Name")
+                    b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("MeasurementProperties");
+                    b.ToTable("MeasurementMetrics", (string)null);
                 });
 
-            modelBuilder.Entity("Shoe_restoration_project.Models.MeasurementValue", b =>
+            modelBuilder.Entity("ShoeRestorationProject.Models.MeasurementProperty", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("Id");
+                        .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("MeasurementMetricId")
-                        .HasColumnType("int")
-                        .HasColumnName("MeasurementPropertyId");
-
-                    b.Property<decimal>("Value")
-                        .HasColumnType("decimal(3, 1)")
-                        .HasColumnName("Value");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("MeasurementMetricId");
-
-                    b.HasIndex(new[] { "Value" }, "IX_MeasurementValues_Name")
+                    b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("MeasurementValues");
+                    b.ToTable("MeasurementProperties", (string)null);
                 });
 
-            modelBuilder.Entity("Shoe_restoration_project.Models.Role", b =>
+            modelBuilder.Entity("ShoeRestorationProject.Models.Role", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -223,60 +177,50 @@ namespace ShoeRestorationProject.Migrations
                         .HasColumnType("nvarchar(64)")
                         .HasColumnName("Name");
 
-                    b.HasKey("Id")
-                        .HasName("PK_Roles");
+                    b.HasKey("Id");
 
-                    b.HasIndex(new[] { "Name" }, "IX_Roles_Name")
+                    b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("Roles");
+                    b.ToTable("Roles", (string)null);
                 });
 
-            modelBuilder.Entity("Shoe_restoration_project.Models.Shoe", b =>
+            modelBuilder.Entity("ShoeRestorationProject.Models.Shoe", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("Id");
+                        .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("BrandId")
-                        .HasColumnType("int")
-                        .HasColumnName("BrandId");
+                        .HasColumnType("int");
 
                     b.Property<int>("ColorId")
-                        .HasColumnType("int")
-                        .HasColumnName("ColorId");
+                        .HasColumnType("int");
 
                     b.Property<int>("ConditionId")
-                        .HasColumnType("int")
-                        .HasColumnName("ConditionId");
+                        .HasColumnType("int");
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("nvarchar(MAX)")
-                        .HasColumnName("Description");
+                        .HasMaxLength(2048)
+                        .HasColumnType("nvarchar(2048)");
 
                     b.Property<int>("ShoeTypeId")
-                        .HasColumnType("int")
-                        .HasColumnName("ShoeTypeId");
-
-                    b.Property<int>("SizeId")
-                        .HasColumnType("int")
-                        .HasColumnName("SizeId");
+                        .HasColumnType("int");
 
                     b.Property<int>("SkinTypeId")
-                        .HasColumnType("int")
-                        .HasColumnName("SkinTypeId");
+                        .HasColumnType("int");
 
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(64)
-                        .HasColumnType("nvarchar(64)")
-                        .HasColumnName("Title");
+                        .HasColumnType("nvarchar(64)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("BrandId");
 
                     b.HasIndex("ColorId");
 
@@ -284,27 +228,21 @@ namespace ShoeRestorationProject.Migrations
 
                     b.HasIndex("ShoeTypeId");
 
-                    b.HasIndex("SizeId");
-
                     b.HasIndex("SkinTypeId");
 
-                    b.HasIndex(new[] { "BrandId" }, "IX_Shoes_BrandId");
-
-                    b.HasIndex(new[] { "Title" }, "IX_Shoes_Title")
-                        .IsUnique();
-
-                    b.ToTable("Shoes");
+                    b.ToTable("Shoes", (string)null);
                 });
 
-            modelBuilder.Entity("Shoe_restoration_project.Models.ShoeImage", b =>
+            modelBuilder.Entity("ShoeRestorationProject.Models.ShoeImage", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier")
-                        .HasColumnName("Id")
-                        .HasDefaultValueSql("(newsequentialid())", "DF_ShoeImages_Id");
+                        .HasColumnName("Id");
 
                     b.Property<byte[]>("ImageData")
+                        .IsRequired()
+                        .HasMaxLength(256)
                         .HasColumnType("varbinary(max)")
                         .HasColumnName("ImageData");
 
@@ -318,130 +256,104 @@ namespace ShoeRestorationProject.Migrations
                         .HasColumnType("int")
                         .HasColumnName("ShoeId");
 
-                    b.HasKey("Id")
-                        .HasName("PK__Shoe_Ima__3214EC07501FBD4C");
-
-                    b.HasIndex(new[] { "Name" }, "IX_ShoeImages_Name")
-                        .IsUnique();
-
-                    b.HasIndex(new[] { "ShoeId" }, "IX_ShoeImages_ShoeId");
-
-                    b.ToTable("ShoeImages");
-                });
-
-            modelBuilder.Entity("Shoe_restoration_project.Models.ShoeMeasurement", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("Id");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("MeasurementPropertyId")
-                        .HasColumnType("int")
-                        .HasColumnName("MeasurementPropertyId");
-
-                    b.Property<int>("MeasurementValueId")
-                        .HasColumnType("int")
-                        .HasColumnName("MeasurementValueId");
-
-                    b.Property<int>("ShoeId")
-                        .HasColumnType("int")
-                        .HasColumnName("ShoeId");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("MeasurementPropertyId");
-
-                    b.HasIndex("MeasurementValueId");
+                    b.HasIndex("Name")
+                        .IsUnique();
 
                     b.HasIndex("ShoeId");
 
-                    b.ToTable("ShoeMeasurements");
+                    b.ToTable("ShoeImages", (string)null);
                 });
 
-            modelBuilder.Entity("Shoe_restoration_project.Models.ShoeType", b =>
+            modelBuilder.Entity("ShoeRestorationProject.Models.ShoeMeasurement", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("Id");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("MeasurementMetricId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MeasurementPropertyId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ShoeId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Value")
+                        .HasMaxLength(2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MeasurementMetricId");
+
+                    b.HasIndex("MeasurementPropertyId");
+
+                    b.HasIndex("ShoeId");
+
+                    b.ToTable("ShoeMeasurements", (string)null);
+                });
+
+            modelBuilder.Entity("ShoeRestorationProject.Models.ShoeType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(MAX)")
-                        .HasColumnName("Description");
+                        .HasMaxLength(2048)
+                        .HasColumnType("nvarchar(2048)");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(64)
-                        .HasColumnType("nvarchar(64)")
-                        .HasColumnName("Name");
+                        .HasColumnType("nvarchar(64)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex(new[] { "Name" }, "IX_ShoeTypes_Name")
+                    b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("ShoeTypes");
+                    b.ToTable("ShoeTypes", (string)null);
                 });
 
-            modelBuilder.Entity("Shoe_restoration_project.Models.Size", b =>
+            modelBuilder.Entity("ShoeRestorationProject.Models.Size", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("Id");
+                        .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("ShoeId")
+                        .HasColumnType("int");
+
                     b.Property<int>("SizeMetricId")
-                        .HasColumnType("int")
-                        .HasColumnName("SizeMetricId");
+                        .HasColumnType("int");
 
                     b.Property<decimal>("Value")
-                        .HasColumnType("decimal(3, 1)")
-                        .HasColumnName("Name");
+                        .HasColumnType("decimal(3,1)");
 
-                    b.HasKey("Id")
-                        .HasName("PK_Shoe_Sizes");
+                    b.HasKey("Id");
+
+                    b.HasIndex("ShoeId")
+                        .IsUnique();
 
                     b.HasIndex("SizeMetricId");
 
-                    b.HasIndex(new[] { "Value" }, "IX_Sizes_Name")
+                    b.HasIndex("Value")
                         .IsUnique();
 
-                    b.ToTable("Sizes");
+                    b.ToTable("Sizes", (string)null);
                 });
 
-            modelBuilder.Entity("Shoe_restoration_project.Models.SizeMetric", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("Id");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(2)
-                        .HasColumnType("nvarchar(2)")
-                        .HasColumnName("Name")
-                        .IsFixedLength();
-
-                    b.HasKey("Id")
-                        .HasName("PK_Metrics");
-
-                    b.HasIndex(new[] { "Name" }, "IX_SizeMetrics_Name")
-                        .IsUnique();
-
-                    b.ToTable("SizeMetrics");
-                });
-
-            modelBuilder.Entity("Shoe_restoration_project.Models.SkinType", b =>
+            modelBuilder.Entity("ShoeRestorationProject.Models.SizeMetric", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -453,18 +365,39 @@ namespace ShoeRestorationProject.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(64)
-                        .HasColumnType("nvarchar(64)")
+                        .HasColumnType("nvarchar(2)")
                         .HasColumnName("Name");
 
                     b.HasKey("Id");
 
-                    b.HasIndex(new[] { "Name" }, "IX_SkinTypes_Name")
+                    b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("SkinTypes");
+                    b.ToTable("SizeMetrics", (string)null);
                 });
 
-            modelBuilder.Entity("Shoe_restoration_project.Models.User", b =>
+            modelBuilder.Entity("ShoeRestorationProject.Models.SkinType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("SkinTypes", (string)null);
+                });
+
+            modelBuilder.Entity("ShoeRestorationProject.Models.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -495,76 +428,58 @@ namespace ShoeRestorationProject.Migrations
                         .HasColumnType("nvarchar(128)")
                         .HasColumnName("Name");
 
-                    b.HasKey("Id")
-                        .HasName("PK_Users");
+                    b.HasKey("Id");
 
                     b.HasIndex("RoleId");
 
-                    b.HasIndex(new[] { "Username" }, "IX_Users_Username")
+                    b.HasIndex("Username")
                         .IsUnique();
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
-            modelBuilder.Entity("Shoe_restoration_project.Models.Brand", b =>
+            modelBuilder.Entity("ShoeRestorationProject.Models.Brand", b =>
                 {
-                    b.HasOne("Shoe_restoration_project.Models.Country", "Country")
+                    b.HasOne("ShoeRestorationProject.Models.Country", "Country")
                         .WithMany("Brands")
                         .HasForeignKey("CountryId")
-                        .IsRequired()
-                        .HasConstraintName("FK_Brands_Countries");
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Country");
                 });
 
-            modelBuilder.Entity("Shoe_restoration_project.Models.MeasurementValue", b =>
+            modelBuilder.Entity("ShoeRestorationProject.Models.Shoe", b =>
                 {
-                    b.HasOne("Shoe_restoration_project.Models.MeasurementMetric", "MeasurementMetric")
-                        .WithMany("MeasurementValues")
-                        .HasForeignKey("MeasurementMetricId")
-                        .IsRequired()
-                        .HasConstraintName("FK_Measurement_Values_Measurement_Metrics");
-
-                    b.Navigation("MeasurementMetric");
-                });
-
-            modelBuilder.Entity("Shoe_restoration_project.Models.Shoe", b =>
-                {
-                    b.HasOne("Shoe_restoration_project.Models.Brand", "Brand")
+                    b.HasOne("ShoeRestorationProject.Models.Brand", "Brand")
                         .WithMany("Shoes")
                         .HasForeignKey("BrandId")
-                        .IsRequired()
-                        .HasConstraintName("FK_Shoes_Brands");
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("Shoe_restoration_project.Models.Color", "Color")
+                    b.HasOne("ShoeRestorationProject.Models.Color", "Color")
                         .WithMany("Shoes")
                         .HasForeignKey("ColorId")
-                        .IsRequired()
-                        .HasConstraintName("FK_Shoes_Colors");
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("Shoe_restoration_project.Models.Condition", "Condition")
+                    b.HasOne("ShoeRestorationProject.Models.Condition", "Condition")
                         .WithMany("Shoes")
                         .HasForeignKey("ConditionId")
-                        .IsRequired()
-                        .HasConstraintName("FK_Shoes_Conditions");
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("Shoe_restoration_project.Models.ShoeType", "ShoeType")
+                    b.HasOne("ShoeRestorationProject.Models.ShoeType", "ShoeType")
                         .WithMany("Shoes")
                         .HasForeignKey("ShoeTypeId")
-                        .IsRequired()
-                        .HasConstraintName("FK_Shoes_Shoe_Types");
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("Shoe_restoration_project.Models.Size", "Size")
-                        .WithMany("Shoes")
-                        .HasForeignKey("SizeId")
-                        .IsRequired()
-                        .HasConstraintName("FK_Shoes_Sizes");
-
-                    b.HasOne("Shoe_restoration_project.Models.SkinType", "SkinType")
+                    b.HasOne("ShoeRestorationProject.Models.SkinType", "SkinType")
                         .WithMany("Shoes")
                         .HasForeignKey("SkinTypeId")
-                        .IsRequired()
-                        .HasConstraintName("FK_Shoes_Skin_Types");
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Brand");
 
@@ -574,134 +489,133 @@ namespace ShoeRestorationProject.Migrations
 
                     b.Navigation("ShoeType");
 
-                    b.Navigation("Size");
-
                     b.Navigation("SkinType");
                 });
 
-            modelBuilder.Entity("Shoe_restoration_project.Models.ShoeImage", b =>
+            modelBuilder.Entity("ShoeRestorationProject.Models.ShoeImage", b =>
                 {
-                    b.HasOne("Shoe_restoration_project.Models.Shoe", "Shoe")
+                    b.HasOne("ShoeRestorationProject.Models.Shoe", "Shoe")
                         .WithMany("ShoeImages")
                         .HasForeignKey("ShoeId")
-                        .IsRequired()
-                        .HasConstraintName("FK_Shoe_Images_Shoes");
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Shoe");
                 });
 
-            modelBuilder.Entity("Shoe_restoration_project.Models.ShoeMeasurement", b =>
+            modelBuilder.Entity("ShoeRestorationProject.Models.ShoeMeasurement", b =>
                 {
-                    b.HasOne("Shoe_restoration_project.Models.MeasurementProperty", "MeasurementProperty")
+                    b.HasOne("ShoeRestorationProject.Models.MeasurementMetric", "MeasurementMetric")
+                        .WithMany("ShoeMeasurements")
+                        .HasForeignKey("MeasurementMetricId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ShoeRestorationProject.Models.MeasurementProperty", "MeasurementProperty")
                         .WithMany("ShoeMeasurements")
                         .HasForeignKey("MeasurementPropertyId")
-                        .IsRequired()
-                        .HasConstraintName("FK_Shoe_Measurements_Measurement_Properties");
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("Shoe_restoration_project.Models.MeasurementValue", "MeasurementValue")
-                        .WithMany("ShoeMeasurements")
-                        .HasForeignKey("MeasurementValueId")
-                        .IsRequired()
-                        .HasConstraintName("FK_Shoe_Measurements_Measurement_Values");
-
-                    b.HasOne("Shoe_restoration_project.Models.Shoe", "Shoe")
+                    b.HasOne("ShoeRestorationProject.Models.Shoe", "Shoe")
                         .WithMany("ShoeMeasurements")
                         .HasForeignKey("ShoeId")
-                        .IsRequired()
-                        .HasConstraintName("FK_Shoe_Measurements_Shoes");
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("MeasurementMetric");
 
                     b.Navigation("MeasurementProperty");
 
-                    b.Navigation("MeasurementValue");
-
                     b.Navigation("Shoe");
                 });
 
-            modelBuilder.Entity("Shoe_restoration_project.Models.Size", b =>
+            modelBuilder.Entity("ShoeRestorationProject.Models.Size", b =>
                 {
-                    b.HasOne("Shoe_restoration_project.Models.SizeMetric", "SizeMetric")
+                    b.HasOne("ShoeRestorationProject.Models.Shoe", "Shoe")
+                        .WithOne("Size")
+                        .HasForeignKey("ShoeRestorationProject.Models.Size", "ShoeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ShoeRestorationProject.Models.SizeMetric", "SizeMetric")
                         .WithMany("Sizes")
                         .HasForeignKey("SizeMetricId")
-                        .IsRequired()
-                        .HasConstraintName("FK_Sizes_Size_Metrics");
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Shoe");
 
                     b.Navigation("SizeMetric");
                 });
 
-            modelBuilder.Entity("Shoe_restoration_project.Models.User", b =>
+            modelBuilder.Entity("ShoeRestorationProject.Models.User", b =>
                 {
-                    b.HasOne("Shoe_restoration_project.Models.Role", "Role")
+                    b.HasOne("ShoeRestorationProject.Models.Role", "Role")
                         .WithMany("Users")
                         .HasForeignKey("RoleId")
-                        .IsRequired()
-                        .HasConstraintName("FK_Users_Roles");
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Role");
                 });
 
-            modelBuilder.Entity("Shoe_restoration_project.Models.Brand", b =>
+            modelBuilder.Entity("ShoeRestorationProject.Models.Brand", b =>
                 {
                     b.Navigation("Shoes");
                 });
 
-            modelBuilder.Entity("Shoe_restoration_project.Models.Color", b =>
+            modelBuilder.Entity("ShoeRestorationProject.Models.Color", b =>
                 {
                     b.Navigation("Shoes");
                 });
 
-            modelBuilder.Entity("Shoe_restoration_project.Models.Condition", b =>
+            modelBuilder.Entity("ShoeRestorationProject.Models.Condition", b =>
                 {
                     b.Navigation("Shoes");
                 });
 
-            modelBuilder.Entity("Shoe_restoration_project.Models.Country", b =>
+            modelBuilder.Entity("ShoeRestorationProject.Models.Country", b =>
                 {
                     b.Navigation("Brands");
                 });
 
-            modelBuilder.Entity("Shoe_restoration_project.Models.MeasurementMetric", b =>
-                {
-                    b.Navigation("MeasurementValues");
-                });
-
-            modelBuilder.Entity("Shoe_restoration_project.Models.MeasurementProperty", b =>
+            modelBuilder.Entity("ShoeRestorationProject.Models.MeasurementMetric", b =>
                 {
                     b.Navigation("ShoeMeasurements");
                 });
 
-            modelBuilder.Entity("Shoe_restoration_project.Models.MeasurementValue", b =>
+            modelBuilder.Entity("ShoeRestorationProject.Models.MeasurementProperty", b =>
                 {
                     b.Navigation("ShoeMeasurements");
                 });
 
-            modelBuilder.Entity("Shoe_restoration_project.Models.Role", b =>
+            modelBuilder.Entity("ShoeRestorationProject.Models.Role", b =>
                 {
                     b.Navigation("Users");
                 });
 
-            modelBuilder.Entity("Shoe_restoration_project.Models.Shoe", b =>
+            modelBuilder.Entity("ShoeRestorationProject.Models.Shoe", b =>
                 {
                     b.Navigation("ShoeImages");
 
                     b.Navigation("ShoeMeasurements");
+
+                    b.Navigation("Size")
+                        .IsRequired();
                 });
 
-            modelBuilder.Entity("Shoe_restoration_project.Models.ShoeType", b =>
+            modelBuilder.Entity("ShoeRestorationProject.Models.ShoeType", b =>
                 {
                     b.Navigation("Shoes");
                 });
 
-            modelBuilder.Entity("Shoe_restoration_project.Models.Size", b =>
-                {
-                    b.Navigation("Shoes");
-                });
-
-            modelBuilder.Entity("Shoe_restoration_project.Models.SizeMetric", b =>
+            modelBuilder.Entity("ShoeRestorationProject.Models.SizeMetric", b =>
                 {
                     b.Navigation("Sizes");
                 });
 
-            modelBuilder.Entity("Shoe_restoration_project.Models.SkinType", b =>
+            modelBuilder.Entity("ShoeRestorationProject.Models.SkinType", b =>
                 {
                     b.Navigation("Shoes");
                 });
