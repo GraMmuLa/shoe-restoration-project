@@ -1,17 +1,29 @@
-using Microsoft.EntityFrameworkCore;
+using System.Text;
+using Mapster;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Scalar.AspNetCore;
+using Serilog;
+using Serilog.Events;
 using ShoeRestorationProject.Context;
+using ShoeRestorationProject.Features.Brands;
+using ShoeRestorationProject.Features.Colors;
+using ShoeRestorationProject.Features.Conditions;
+using ShoeRestorationProject.Features.Countries;
+using ShoeRestorationProject.Features.MeasurementMetrics;
+using ShoeRestorationProject.Features.MeasurementProperties;
+using ShoeRestorationProject.Features.ShoeImages;
+using ShoeRestorationProject.Features.ShoeMeasurements;
+using ShoeRestorationProject.Features.ShoeTypes;
+using ShoeRestorationProject.Features.SizeMetrics;
+using ShoeRestorationProject.Features.Sizes;
+using ShoeRestorationProject.Features.SkinTypes;
 using ShoeRestorationProject.Helpers;
 using ShoeRestorationProject.Helpers.Implementations;
 using ShoeRestorationProject.Repositories;
 using ShoeRestorationProject.Repositories.Implementations;
 using ShoeRestorationProject.Services;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
-using Serilog;
-using Serilog.Events;
-using Mapster;
 
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Information()
@@ -52,7 +64,7 @@ builder.Services.AddScoped<ConditionService>();
 builder.Services.AddScoped<CountryService>();
 builder.Services.AddScoped<MeasurementMetricService>();
 builder.Services.AddScoped<MeasurementPropertyService>();
-builder.Services.AddScoped<MeasurementValueService>();
+builder.Services.AddScoped<ShoeMeasurementService>();
 builder.Services.AddScoped<ShoeImageService>();
 builder.Services.AddScoped<ShoeService>();
 builder.Services.AddScoped<ShoeTypeService>();
@@ -64,7 +76,7 @@ builder.Services.AddScoped<SkinTypeService>();
 
 #region Adding Helpers
 
-builder.Services.AddScoped(typeof(IUnitOfWork<>), typeof(UnitOfWork<>));
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 #endregion
 

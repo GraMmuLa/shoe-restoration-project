@@ -1,12 +1,12 @@
 ﻿namespace ShoeRestorationProject.Helpers
 {
-    public interface IUnitOfWork<T> where T : class
+    public interface IUnitOfWork
     {
         public void Execute(Action action);
         public Task ExecuteAsync(Func<Task> action);
-        public T Execute(Func<T> func);
-        public Task<T> ExecuteAsync(Func<Task<T>> func);
+        public T Execute<T>(Func<T> func);
+        public Task<T> ExecuteAsync<T>(Func<Task<T>> func);
         public Task ExecuteAsync(Action func);
-        public Task<T> ExecuteAsync(Func<T> func);
+        public Task<T> ExecuteAsync<T>(Func<T> func);
     }
 }

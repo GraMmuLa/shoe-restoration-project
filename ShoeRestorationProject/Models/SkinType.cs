@@ -3,15 +3,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ShoeRestorationProject.Models;
 
-[Table("SkinTypes")]
 public class SkinType
 {
-    [Key]
-    [Column("Id", TypeName = "int")]
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
 
-    [Column("Name", TypeName = "nvarchar(64)")]
     public string Name { get; set; } = null!;
 
     public ICollection<Shoe> Shoes { get; set; } = new List<Shoe>();

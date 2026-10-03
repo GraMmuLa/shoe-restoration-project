@@ -1,114 +1,116 @@
-﻿using Microsoft.EntityFrameworkCore.Storage;
+﻿using System.Transactions;
 using ShoeRestorationProject.Context;
 
 namespace ShoeRestorationProject.Helpers.Implementations
 {
-    public class UnitOfWork<T> : IUnitOfWork<T> where T : class
+    public class UnitOfWork(AppDbContext context,
+        ILogger<UnitOfWork> logger) : IUnitOfWork
     {
-        private readonly AppDbContext _context;
-        public UnitOfWork(AppDbContext context)
-        {
-            _context = context;
-        }
-
         public void Execute(Action action)
         {
-            using var transaction = _context.Database.BeginTransaction();
+            using var transaction = context.Database.BeginTransaction();
             try
             {
-
                 action();
-                _context.SaveChanges();
+                context.SaveChanges();
                 transaction.Commit();
             }
-            catch
+            catch(Exception ex)
             {
+                logger.LogError(ex, "Transaction failed");
+                
                 transaction.Rollback();
-                throw;
+                throw new TransactionException("Transaction failed");
             }
         }
         
-        public T Execute(Func<T> action)
+        public T Execute<T>(Func<T> action)
         {
-            using var transaction = _context.Database.BeginTransaction();
+            using var transaction = context.Database.BeginTransaction();
             try
             {
-
                 var result = action();
-                _context.SaveChanges();
+                context.SaveChanges();
                 transaction.Commit();
                 return result;
             }
-            catch
+            catch(Exception ex)
             {
+                logger.LogError(ex, "Transaction failed");
                 transaction.Rollback();
-                throw;
+                throw new TransactionException("Transaction failed");
             }
         }
 
         public async Task ExecuteAsync(Func<Task> func)
         {
-            await using var transaction = await _context.Database.BeginTransactionAsync();
+            await using var transaction = await context.Database.BeginTransactionAsync();
             try
             {
                 await func();
-                await _context.SaveChangesAsync();
+                await context.SaveChangesAsync();
                 await transaction.CommitAsync();
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
+                logger.LogError(ex, "Transaction failed");
                 await transaction.RollbackAsync();
-                throw;
+                throw new TransactionException("Transaction failed");
             }
         }
 
-        public async Task<T> ExecuteAsync(Func<Task<T>> func)
+        public async Task<T> ExecuteAsync<T>(Func<Task<T>> func)
         {
-            await using var transaction = await _context.Database.BeginTransactionAsync();
+            await using var transaction = await context.Database.BeginTransactionAsync();
             try
             {
                 var result = await func();
-                await _context.SaveChangesAsync();
+                await context.SaveChangesAsync();
                 await transaction.CommitAsync();
                 return result;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
+                logger.LogError(ex, "Transaction failed");
                 await transaction.RollbackAsync();
-                throw;
+                throw new TransactionException("Transaction failed");
             }
         }
         
         public async Task ExecuteAsync(Action func)
         {
-            await using var transaction = await _context.Database.BeginTransactionAsync();
+            await using var transaction = await context.Database.BeginTransactionAsync();
             try
             {
                 func();
-                await _context.SaveChangesAsync();
+                await context.SaveChangesAsync();
                 await transaction.CommitAsync();
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
+                logger.LogError(ex, "Transaction failed");
+                
                 await transaction.RollbackAsync();
-                throw;
+                throw new TransactionException("Transaction failed");
             }
         }
         
-        public async Task<T> ExecuteAsync(Func<T> func)
+        public async Task<T> ExecuteAsync<T>(Func<T> func)
         {
-            await using var transaction = await _context.Database.BeginTransactionAsync();
+            await using var transaction = await context.Database.BeginTransactionAsync();
             try
             {
                 var result = func();
-                await _context.SaveChangesAsync();
+                await context.SaveChangesAsync();
                 await transaction.CommitAsync();
                 return result;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
+                logger.LogError(ex, "Transaction failed");
+                
                 await transaction.RollbackAsync();
-                throw;
+                throw new TransactionException("Transaction failed");
             }
         }
     }
