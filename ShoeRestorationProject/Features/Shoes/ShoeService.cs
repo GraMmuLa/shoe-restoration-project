@@ -1,11 +1,11 @@
 using MapsterMapper;
 using ShoeRestorationProject.Exceptions;
+using ShoeRestorationProject.Features.Shoes.DTO;
 using ShoeRestorationProject.Helpers;
 using ShoeRestorationProject.Models;
 using ShoeRestorationProject.Repositories;
-using ShoeRestorationProject.Features.Shoes;
 
-namespace ShoeRestorationProject.Services;
+namespace ShoeRestorationProject.Features.Shoes;
 
 public class ShoeService(IShoesRepository repository, IUnitOfWork unitOfWork, IMapper mapper)
 {
@@ -14,9 +14,13 @@ public class ShoeService(IShoesRepository repository, IUnitOfWork unitOfWork, IM
         if(await repository.ExistsByPropertyAsync(x=> x.Id == 0))
             throw new UniqueObjectException("Shoe already exists");
         
-        return mapper.Map<ShoeResponse>(await unitOfWork.ExecuteAsync(() =>
-            repository.AddAsync(mapper.Map<Shoe>(entity))));
-    }    public async Task<ShoeResponse> UpdateAsync(int id, ShoeRequest shoeRequest)
+        var shoe = await unitOfWork.ExecuteAsync(() =>
+            repository.AddAsync(mapper.Map<Shoe>(entity)));
+
+        return await GetByIdAsync(shoe.Id);
+    }
+    
+    public async Task<ShoeResponse> UpdateAsync(int id, ShoeRequest shoeRequest)
     {
         var shoe = await repository.GetByPropertyAsync(x => x.Id == id)
                     ?? throw new NotFoundException("Shoe is not found");

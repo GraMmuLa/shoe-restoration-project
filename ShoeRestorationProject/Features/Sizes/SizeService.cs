@@ -1,5 +1,6 @@
 using MapsterMapper;
 using ShoeRestorationProject.Exceptions;
+using ShoeRestorationProject.Features.Sizes.DTO;
 using ShoeRestorationProject.Helpers;
 using ShoeRestorationProject.Models;
 using ShoeRestorationProject.Repositories;
@@ -13,8 +14,10 @@ public class SizeService(IRepository<Size, int> repository, IUnitOfWork unitOfWo
         if(await repository.ExistsByPropertyAsync(x=> x.Id == 0))
             throw new UniqueObjectException("Size already exists");
         
-        return mapper.Map<SizeResponse>(await unitOfWork.ExecuteAsync(() =>
-            repository.AddAsync(mapper.Map<Size>(entity))));
+        var size = await unitOfWork.ExecuteAsync(() =>
+            repository.AddAsync(mapper.Map<Size>(entity)));
+
+        return await GetByIdAsync(size.Id);
     }
     
     public async Task<SizeResponse> UpdateAsync(int id, SizeRequest sizeRequest)

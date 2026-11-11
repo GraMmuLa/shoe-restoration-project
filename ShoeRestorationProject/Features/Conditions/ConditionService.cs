@@ -3,26 +3,33 @@ using ShoeRestorationProject.Exceptions;
 using ShoeRestorationProject.Helpers;
 using ShoeRestorationProject.Models;
 using ShoeRestorationProject.Repositories;
+using ShoeRestorationProject.Features.Conditions.DTO;
 
 namespace ShoeRestorationProject.Features.Conditions;
 
-public class ConditionService(IRepository<Condition, int> repository,
-    IUnitOfWork unitOfWork, IMapper mapper)
+public class ConditionService(
+    IRepository<Condition, int> repository,
+    IUnitOfWork unitOfWork,
+    IMapper mapper)
 {
     public async Task<ConditionResponse> AddAsync(ConditionRequest entity)
     {
-        if(await repository.ExistsByPropertyAsync(x=> x.Name == entity.Name))
+        if (await repository.ExistsByPropertyAsync(x => x.Name == entity.Name))
             throw new UniqueObjectException("Condition already exists");
-        
-        return mapper.Map<ConditionResponse>(await unitOfWork.ExecuteAsync(() =>
-            repository.AddAsync(mapper.Map<Condition>(entity))));
-    }    public async Task<ConditionResponse> UpdateAsync(int id, ConditionRequest conditionRequest)
+
+        var condition = await unitOfWork.ExecuteAsync(() =>
+            repository.AddAsync(mapper.Map<Condition>(entity)));
+
+        return await GetByIdAsync(condition.Id);
+    }
+
+    public async Task<ConditionResponse> UpdateAsync(int id, ConditionRequest conditionRequest)
     {
-        var condition = await repository.GetByPropertyAsync(x => x.Id == id)
-                    ?? throw new NotFoundException("Condition is not found");
+        var condition = await repository.GetByPropertyAsync(x => x.Id == id) ??
+            throw new NotFoundException("Condition is not found");
 
         mapper.Map(conditionRequest, condition);
-        
+
         return mapper.Map<ConditionResponse>(await unitOfWork.ExecuteAsync(() =>
             repository.Update(condition)));
     }
@@ -32,28 +39,28 @@ public class ConditionService(IRepository<Condition, int> repository,
     {
         if (!await repository.ExistsByPropertyAsync(x => x.Name == entity.Name))
             throw new NotFoundException("Condition not found");
-            
+
         return mapper.Map<ConditionResponse>(await unitOfWork.ExecuteAsync(() =>
             repository.Delete(mapper.Map<Condition>(entity))));
     }
-    
+
     public async Task<ConditionResponse> DeleteAsync(int id)
     {
-        var model = await repository.GetByPropertyAsync(x=>x.Id == id) ??
-                    throw new NotFoundException("Condition not found");
-            
+        var model = await repository.GetByPropertyAsync(x => x.Id == id) ??
+            throw new NotFoundException("Condition not found");
+
         return mapper.Map<ConditionResponse>(await unitOfWork.ExecuteAsync(() =>
             repository.Delete(model)));
     }
 
     public async Task<ConditionResponse> GetByIdAsync(int id)
     {
-        var model = await repository.GetByPropertyAsync(x=>x.Id == id);
-        
+        var model = await repository.GetByPropertyAsync(x => x.Id == id);
+
         return mapper.Map<ConditionResponse>(model ??
-            throw new NotFoundException("Condition not found") );
+            throw new NotFoundException("Condition not found"));
     }
 
     public async Task<IList<ConditionResponse>> GetAllAsync() =>
-        [..(await repository.GetAllAsync()).Select(mapper.Map<ConditionResponse>)];
+        [.. (await repository.GetAllAsync()).Select(mapper.Map<ConditionResponse>)];
 }

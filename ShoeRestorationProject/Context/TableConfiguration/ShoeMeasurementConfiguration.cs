@@ -12,7 +12,7 @@ public class ShoeMeasurementConfiguration : IEntityTypeConfiguration<ShoeMeasure
             .HasKey(p => p.Id);
         
         builder.Property(p => p.Value)
-            .HasMaxLength(2)
+            .HasPrecision(3,1)
             .IsRequired();
 
         builder.HasOne(m => m.Shoe)

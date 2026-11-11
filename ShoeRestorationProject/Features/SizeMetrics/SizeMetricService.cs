@@ -3,6 +3,7 @@ using ShoeRestorationProject.Exceptions;
 using ShoeRestorationProject.Helpers;
 using ShoeRestorationProject.Models;
 using ShoeRestorationProject.Repositories;
+using ShoeRestorationProject.Features.SizeMetrics.DTO;
 
 namespace ShoeRestorationProject.Features.SizeMetrics;
 
@@ -13,17 +14,21 @@ public class SizeMetricService(IRepository<SizeMetric, int> repository, IUnitOfW
         if(await repository.ExistsByPropertyAsync(x=> x.Name == entity.Name))
             throw new UniqueObjectException("SizeMetric already exists");
         
-        return mapper.Map<SizeMetricResponse>(await unitOfWork.ExecuteAsync(() =>
-            repository.AddAsync(mapper.Map<SizeMetric>(entity))));
-    }    public async Task<SizeMetricResponse> UpdateAsync(int id, SizeMetricRequest sizemetricRequest)
+        var sizeMetric = await unitOfWork.ExecuteAsync(() =>
+            repository.AddAsync(mapper.Map<SizeMetric>(entity)));
+
+        return await GetByIdAsync(sizeMetric.Id);
+    }
+    
+    public async Task<SizeMetricResponse> UpdateAsync(int id, SizeMetricRequest sizeMetricRequest)
     {
-        var sizemetric = await repository.GetByPropertyAsync(x => x.Id == id)
+        var sizeMetric = await repository.GetByPropertyAsync(x => x.Id == id)
                     ?? throw new NotFoundException("SizeMetric is not found");
 
-        mapper.Map(sizemetricRequest, sizemetric);
+        mapper.Map(sizeMetricRequest, sizeMetric);
         
         return mapper.Map<SizeMetricResponse>(await unitOfWork.ExecuteAsync(() =>
-            repository.Update(sizemetric)));
+            repository.Update(sizeMetric)));
     }
 
 

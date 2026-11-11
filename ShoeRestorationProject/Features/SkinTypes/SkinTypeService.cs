@@ -1,5 +1,6 @@
 using MapsterMapper;
 using ShoeRestorationProject.Exceptions;
+using ShoeRestorationProject.Features.SkinTypes.DTO;
 using ShoeRestorationProject.Helpers;
 using ShoeRestorationProject.Models;
 using ShoeRestorationProject.Repositories;
@@ -13,9 +14,12 @@ public class SkinTypeService(IRepository<SkinType, int> repository, IUnitOfWork 
         if(await repository.ExistsByPropertyAsync(x=> x.Name == entity.Name))
             throw new UniqueObjectException("SkinType already exists");
         
-        return mapper.Map<SkinTypeResponse>(await unitOfWork.ExecuteAsync(() =>
-            repository.AddAsync(mapper.Map<SkinType>(entity))));
+        var skinType = await unitOfWork.ExecuteAsync(() =>
+            repository.AddAsync(mapper.Map<SkinType>(entity)));
+
+        return await GetByIdAsync(skinType.Id);
     }
+    
     public async Task<SkinTypeResponse> UpdateAsync(int id, SkinTypeRequest skinTypeRequest)
     {
         var skinType = await repository.GetByPropertyAsync(x => x.Id == id)

@@ -3,6 +3,7 @@ using ShoeRestorationProject.Exceptions;
 using ShoeRestorationProject.Helpers;
 using ShoeRestorationProject.Models;
 using ShoeRestorationProject.Repositories;
+using ShoeRestorationProject.Features.MeasurementProperties.DTO;
 
 namespace ShoeRestorationProject.Features.MeasurementProperties;
 
@@ -13,17 +14,21 @@ public class MeasurementPropertyService(IRepository<MeasurementProperty, int> re
         if(await repository.ExistsByPropertyAsync(x=> x.Name == entity.Name))
             throw new UniqueObjectException("MeasurementProperty already exists");
         
-        return mapper.Map<MeasurementPropertyResponse>(await unitOfWork.ExecuteAsync(() =>
-            repository.AddAsync(mapper.Map<MeasurementProperty>(entity))));
-    }    public async Task<MeasurementPropertyResponse> UpdateAsync(int id, MeasurementPropertyRequest measurementpropertyRequest)
-    {
-        var measurementproperty = await repository.GetByPropertyAsync(x => x.Id == id)
-                    ?? throw new NotFoundException("MeasurementProperty is not found");
+        var measurementProperty = await unitOfWork.ExecuteAsync(() =>
+            repository.AddAsync(mapper.Map<MeasurementProperty>(entity)));
 
-        mapper.Map(measurementpropertyRequest, measurementproperty);
+        return await GetByIdAsync(measurementProperty.Id);
+    }
+    
+    public async Task<MeasurementPropertyResponse> UpdateAsync(int id, MeasurementPropertyRequest measurementPropertyRequest)
+    {
+        var measurementProperty = await repository.GetByPropertyAsync(x => x.Id == id) ??
+            throw new NotFoundException("MeasurementProperty is not found");
+
+        mapper.Map(measurementPropertyRequest, measurementProperty);
         
         return mapper.Map<MeasurementPropertyResponse>(await unitOfWork.ExecuteAsync(() =>
-            repository.Update(measurementproperty)));
+            repository.Update(measurementProperty)));
     }
 
 

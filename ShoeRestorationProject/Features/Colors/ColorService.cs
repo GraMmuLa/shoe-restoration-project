@@ -3,6 +3,7 @@ using ShoeRestorationProject.Exceptions;
 using ShoeRestorationProject.Helpers;
 using ShoeRestorationProject.Models;
 using ShoeRestorationProject.Repositories;
+using ShoeRestorationProject.Features.Colors.DTO;
 
 namespace ShoeRestorationProject.Features.Colors;
 
@@ -14,8 +15,10 @@ public class ColorService(IRepository<Color, int> repository,
         if(await repository.ExistsByPropertyAsync(x=> x.Name == colorRequest.Name))
             throw new UniqueObjectException("Color already exists");
         
-        return mapper.Map<ColorResponse>(await unitOfWork.ExecuteAsync(() =>
-            repository.AddAsync(mapper.Map<Color>(colorRequest))));
+        var color = await unitOfWork.ExecuteAsync(() =>
+            repository.AddAsync(mapper.Map<Color>(colorRequest)));
+
+        return await GetByIdAsync(color.Id);
     }
 
     public async Task<ColorResponse> UpdateAsync(int id, ColorRequest colorRequest)

@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using System.Text;
 using Mapster;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -11,19 +12,22 @@ using ShoeRestorationProject.Features.Brands;
 using ShoeRestorationProject.Features.Colors;
 using ShoeRestorationProject.Features.Conditions;
 using ShoeRestorationProject.Features.Countries;
+using ShoeRestorationProject.Features.Jwt;
 using ShoeRestorationProject.Features.MeasurementMetrics;
 using ShoeRestorationProject.Features.MeasurementProperties;
+using ShoeRestorationProject.Features.Roles;
 using ShoeRestorationProject.Features.ShoeImages;
 using ShoeRestorationProject.Features.ShoeMeasurements;
+using ShoeRestorationProject.Features.Shoes;
 using ShoeRestorationProject.Features.ShoeTypes;
 using ShoeRestorationProject.Features.SizeMetrics;
 using ShoeRestorationProject.Features.Sizes;
 using ShoeRestorationProject.Features.SkinTypes;
+using ShoeRestorationProject.Features.Users;
 using ShoeRestorationProject.Helpers;
 using ShoeRestorationProject.Helpers.Implementations;
 using ShoeRestorationProject.Repositories;
 using ShoeRestorationProject.Repositories.Implementations;
-using ShoeRestorationProject.Services;
 
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Information()
@@ -71,6 +75,10 @@ builder.Services.AddScoped<ShoeTypeService>();
 builder.Services.AddScoped<SizeMetricService>();
 builder.Services.AddScoped<SizeService>();
 builder.Services.AddScoped<SkinTypeService>();
+builder.Services.AddScoped<RoleService>();
+builder.Services.AddScoped<UserService>();
+
+builder.Services.AddSingleton<IJwtTokenService, JwtTokenService>();
 
 #endregion
 
@@ -80,10 +88,18 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 #endregion
 
+builder.Services.AddOptions<JwtOptions>().BindConfiguration(JwtOptions.Section)
+    .Validate((options =>
+            !string.IsNullOrWhiteSpace(options.Issuer) &&
+            !string.IsNullOrWhiteSpace(options.Audience) &&
+            !string.IsNullOrWhiteSpace(options.SecretKey) &&
+            options.ExpirationMinutes > 0), "Invalid Jwt Configuration"
+        ).ValidateOnStart();
+
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
 {
-    options.TokenValidationParameters = new()
+    options.TokenValidationParameters = new TokenValidationParameters
     {
         ValidateIssuer = true,
         ValidateLifetime = true,
@@ -92,22 +108,31 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
         ValidIssuer = builder.Configuration["Jwt:Issuer"],
         ValidAudience = builder.Configuration["Jwt:Audience"],
+        
+        RoleClaimType = ClaimTypes.Role,
 
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:SecretKey"]!))
+    };
+    
+    options.Events = new JwtBearerEvents
+    {
+        OnMessageReceived = context =>
+        {
+            context.Token = context.Request.Cookies["jwt-token"];
+            return Task.CompletedTask;
+        }
     };
 });
 
 builder.Services.AddAuthorization();
-
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 builder.Services.AddRouting(options => options.LowercaseUrls = true);
 
 var app = builder.Build();
 
-Log.Information("Application starting");
-
 app.UseHttpsRedirection();
+app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
@@ -118,8 +143,19 @@ if (app.Environment.IsDevelopment())
     app.MapScalarApiReference();
 }
 
-app.MapGet("/", () => Results.Ok());
+app.MapGet("/", () => Results.Redirect("scalar"));
 app.MapControllers();
-
-Log.CloseAndFlush();
-app.Run();
+try
+{
+    Log.Information("Application starting");
+    app.Run();
+}
+catch (Exception ex)
+{
+    Log.Fatal(ex, "Application terminated unexpectedly {ExMessage}", ex.Message);
+    throw;
+}
+finally
+{
+    Log.CloseAndFlush();
+}

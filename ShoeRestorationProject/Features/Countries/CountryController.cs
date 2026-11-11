@@ -1,11 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
 using ShoeRestorationProject.Exceptions;
-using ShoeRestorationProject.Services;
+using ShoeRestorationProject.Features.Countries.DTO;
 
 namespace ShoeRestorationProject.Features.Countries;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/countries")]
 public class CountryController(CountryService service, ILogger<CountryController> logger) : ControllerBase
 {
     /// <summary>Retrieves all country.</summary>
@@ -22,11 +22,20 @@ public class CountryController(CountryService service, ILogger<CountryController
         try
         {
             var result = await service.GetAllAsync();
-            if (result.Count == 0) { logger.LogWarning("GET /api/countries - no country found"); return NoContent(); }
+            if (result.Count == 0)
+            {
+                logger.LogWarning("GET /api/countries - no country found");
+                return NoContent();
+            }
+
             logger.LogInformation("GET /api/countries - returned {Count} country", result.Count);
             return Ok(result);
         }
-        catch (Exception ex) { logger.LogError(ex, "Error in GET /api/country"); return StatusCode(500, "Internal server error."); }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Error in GET /api/country");
+            return StatusCode(500, "Internal server error.");
+        }
     }
 
     /// <summary>Retrieves a country by its identifier.</summary>
@@ -36,9 +45,22 @@ public class CountryController(CountryService service, ILogger<CountryController
     public async Task<ActionResult<CountryResponse>> GetByIdAsync(int id)
     {
         logger.LogInformation("GET /api/countries/{Id} - request to get country by id", id);
-        try { var result = await service.GetByIdAsync(id); logger.LogInformation("GET /api/countries/{Id} - country found: {@Country}", id, result); return Ok(result); }
-        catch (NotFoundException ex) { logger.LogWarning(ex, "GET /api/countries/{Id} - country not found", id); return Problem(statusCode: StatusCodes.Status404NotFound, title: ex.Message); }
-        catch (Exception ex) { logger.LogError(ex, "Error in GET /api/countries/{Id}", id); return StatusCode(500, "Internal server error."); }
+        try
+        {
+            var result = await service.GetByIdAsync(id);
+            logger.LogInformation("GET /api/countries/{Id} - country found: {@Country}", id, result);
+            return Ok(result);
+        }
+        catch (NotFoundException ex)
+        {
+            logger.LogWarning(ex, "GET /api/countries/{Id} - country not found", id);
+            return Problem(statusCode: StatusCodes.Status404NotFound, title: ex.Message);
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Error in GET /api/countries/{Id}", id);
+            return StatusCode(500, "Internal server error.");
+        }
     }
 
     [ProducesResponseType(201)]
@@ -48,9 +70,22 @@ public class CountryController(CountryService service, ILogger<CountryController
     public async Task<ActionResult> AddAsync([FromForm] CountryRequest country)
     {
         logger.LogInformation("POST /api/countries - attempt to add country: {@CountryRequest}", country);
-        try { var result = await service.AddAsync(country); logger.LogInformation("POST /api/countries - country added successfully"); return CreatedAtRoute(nameof(GetByIdAsync), new { id = result.Id }, result); }
-        catch (UniqueObjectException ex) { logger.LogWarning(ex, "POST /api/countries - country is already exists"); return Problem(statusCode: StatusCodes.Status409Conflict, title: ex.Message); }
-        catch (Exception ex) { logger.LogError(ex, "Error in POST /api/countries"); return BadRequest(); }
+        try
+        {
+            var result = await service.AddAsync(country);
+            logger.LogInformation("POST /api/countries - country added successfully");
+            return CreatedAtRoute(nameof(GetByIdAsync), new { id = result.Id }, result);
+        }
+        catch (UniqueObjectException ex)
+        {
+            logger.LogWarning(ex, "POST /api/countries - country is already exists");
+            return Problem(statusCode: StatusCodes.Status409Conflict, title: ex.Message);
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Error in POST /api/countries");
+            return BadRequest();
+        }
     }
 
     [ProducesResponseType(200)]
@@ -88,8 +123,21 @@ public class CountryController(CountryService service, ILogger<CountryController
     public async Task<ActionResult> DeleteAsync(int id)
     {
         logger.LogInformation("DELETE /api/countries/{Id} - attempt to delete country", id);
-        try { CountryResponse result = await service.DeleteAsync(id); logger.LogInformation("DELETE /api/countries/{Id} - country deleted successfully", id); return Ok(result); }
-        catch (NotFoundException ex) { logger.LogWarning(ex, "DELETE /api/countries/{Id} - country not found", id); return Problem(title: ex.Message, statusCode: StatusCodes.Status404NotFound); }
-        catch (Exception ex) { logger.LogError(ex, "Error in DELETE /api/countries/{Id}", id); return BadRequest(); }
+        try
+        {
+            CountryResponse result = await service.DeleteAsync(id);
+            logger.LogInformation("DELETE /api/countries/{Id} - country deleted successfully", id);
+            return Ok(result);
+        }
+        catch (NotFoundException ex)
+        {
+            logger.LogWarning(ex, "DELETE /api/countries/{Id} - country not found", id);
+            return Problem(title: ex.Message, statusCode: StatusCodes.Status404NotFound);
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Error in DELETE /api/countries/{Id}", id);
+            return BadRequest();
+        }
     }
 }

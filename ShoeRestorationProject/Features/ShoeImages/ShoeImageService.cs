@@ -1,5 +1,6 @@
 using MapsterMapper;
 using ShoeRestorationProject.Exceptions;
+using ShoeRestorationProject.Features.ShoeImages.DTO;
 using ShoeRestorationProject.Helpers;
 using ShoeRestorationProject.Models;
 using ShoeRestorationProject.Repositories;
@@ -10,20 +11,24 @@ public class ShoeImageService(IRepository<ShoeImage, Guid> repository, IUnitOfWo
 {
     public async Task<ShoeImageResponse> AddAsync(ShoeImageRequest entity)
     {
-        if(await repository.ExistsByPropertyAsync(x=> x.Id == Guid.Empty))
+        if (await repository.ExistsByPropertyAsync(x => x.Id == Guid.Empty))
             throw new UniqueObjectException("ShoeImage already exists");
-        
-        return mapper.Map<ShoeImageResponse>(await unitOfWork.ExecuteAsync(() =>
-            repository.AddAsync(mapper.Map<ShoeImage>(entity))));
-    }    public async Task<ShoeImageResponse> UpdateAsync(Guid id, ShoeImageRequest shoeimageRequest)
+
+        var shoeImage = await unitOfWork.ExecuteAsync(() =>
+            repository.AddAsync(mapper.Map<ShoeImage>(entity)));
+
+        return await GetByIdAsync(shoeImage.Id);
+    }
+
+    public async Task<ShoeImageResponse> UpdateAsync(Guid id, ShoeImageRequest shoeImageRequest)
     {
-        var shoeimage = await repository.GetByPropertyAsync(x => x.Id == id)
+        var shoeImage = await repository.GetByPropertyAsync(x => x.Id == id)
                     ?? throw new NotFoundException("ShoeImage is not found");
 
-        mapper.Map(shoeimageRequest, shoeimage);
+        mapper.Map(shoeImageRequest, shoeImage);
         
         return mapper.Map<ShoeImageResponse>(await unitOfWork.ExecuteAsync(() =>
-            repository.Update(shoeimage)));
+            repository.Update(shoeImage)));
     }
 
 

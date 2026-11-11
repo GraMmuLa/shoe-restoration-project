@@ -1,10 +1,13 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ShoeRestorationProject.Exceptions;
+using ShoeRestorationProject.Features.Brands.DTO;
+using ShoeRestorationProject.Features.Roles;
 
 namespace ShoeRestorationProject.Features.Brands
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/brands")]
     public class BrandController(BrandService service,
         ILogger<BrandController> logger) : ControllerBase
     {
@@ -86,6 +89,7 @@ namespace ShoeRestorationProject.Features.Brands
         [ProducesResponseType(201)]
         [ProducesResponseType(400)]
         [ProducesResponseType(409)]
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<ActionResult> AddAsync([FromForm] BrandRequest brand)
         {
@@ -114,7 +118,8 @@ namespace ShoeRestorationProject.Features.Brands
         /// Update a brand
         /// </summary>
         /// <remarks>Submit the updated brand object in the request body, including its identifier. The endpoint returns 200 OK when the update succeeds and 400 Bad Request if it fails.</remarks>
-        /// <param name="obj">The updated brand data, including the identifier of the brand to update.</param>
+        /// <param name="id">An id of a brand we need to update</param>
+        /// <param name="obj">The updated brand data</param>
         /// <returns>An empty success response when the brand is updated.</returns>
         /// <response code="200">The brand was updated successfully.</response>
         /// <response code="400">The brand could not be updated.</response>
@@ -122,10 +127,11 @@ namespace ShoeRestorationProject.Features.Brands
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
-                [HttpPut("{id:int}")]
+        [Authorize(Roles = "Admin")]
+        [HttpPut("{id:int}")]
         public async Task<ActionResult> UpdateAsync(int id, BrandRequest obj)
         {
-            logger.LogInformation("PUT /api/brands - attempt to update brand: {@ BrandRequest}", obj);
+            logger.LogInformation("PUT /api/brands - attempt to update brand: {@BrandRequest}", obj);
             try
             {
                 var result = await service.UpdateAsync(id, obj);
@@ -159,6 +165,7 @@ namespace ShoeRestorationProject.Features.Brands
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
+        [Authorize(Roles = AppRoles.Admin)]
         [HttpDelete("{id:int}")]
         public async Task<ActionResult> DeleteAsync(int id)
         {

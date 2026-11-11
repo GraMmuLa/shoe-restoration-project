@@ -13,6 +13,7 @@ public class SizeConfiguration : IEntityTypeConfiguration<Size>
         
         builder.Property(p => p.Value)
             .HasColumnType("decimal(3,1)")
+            .HasPrecision(3,1)
             .IsRequired();
         
         builder.HasOne(p => p.SizeMetric)

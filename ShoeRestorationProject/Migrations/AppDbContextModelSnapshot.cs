@@ -284,8 +284,8 @@ namespace ShoeRestorationProject.Migrations
                         .HasColumnType("int");
 
                     b.Property<decimal>("Value")
-                        .HasMaxLength(2)
-                        .HasColumnType("decimal(18,2)");
+                        .HasPrecision(3, 1)
+                        .HasColumnType("decimal(3,1)");
 
                     b.HasKey("Id");
 
@@ -338,6 +338,7 @@ namespace ShoeRestorationProject.Migrations
                         .HasColumnType("int");
 
                     b.Property<decimal>("Value")
+                        .HasPrecision(3, 1)
                         .HasColumnType("decimal(3,1)");
 
                     b.HasKey("Id");
